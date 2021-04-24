@@ -13,7 +13,6 @@ function App() {
   return (
     <div className="App">
       <Router>
-        <div>
           <Switch>
             <Route path="/PMDashboard">
               {/* {state.user ? (
@@ -41,7 +40,6 @@ function App() {
               <Landing />
             </Route>
           </Switch>
-        </div>
       </Router>
     </div>
   );

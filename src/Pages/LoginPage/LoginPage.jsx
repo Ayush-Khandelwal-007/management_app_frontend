@@ -3,58 +3,167 @@ import './styling.scss'
 import palm from '../../assets/hand.svg'
 import { motion } from "framer-motion";
 import { Input } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import logo from '../../assets/logo.jpeg'
+import Axios from 'axios'
 
 function LoginPage() {
 
     const [closeEyes, setCloseEyes] = useState(false);
+    const [seePassword,setSeePassword]=useState(false);
     const [username, setUsename] = useState('');
+    const [name, setName] = useState('');
     const [password, setPassword] = useState('');
-    const [type, setType] = useState('');
+    const [type, setType] = useState('manager');
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [formType, setFormType] = useState('login')
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handelRegister = (e) => {
+        e.preventDefault();
+        if(type==='manager'){
+            Axios.post('http://localhost:4000/api/insertp', {
+                ProdUserName: username,
+                ProdName: name,
+                ProdPass: password,
+            }).then((res)=>{
+                if(res.data==='success'){
+                    setName('');
+                    setUsename('');
+                    setPassword('');
+                    setFormType('login');
+                }
+            })
+        }
+        else{
+            Axios.post('http://localhost:4000/api/inserte', {
+                EmpUserName: username,
+                EmpName: name,
+                EmpPass: password,
+            }).then((res)=>{
+                if(res.data==='success'){
+                    setName('');
+                    setUsename('');
+                    setPassword('');
+                    setFormType('login');
+                }
+            })
+        }
+
+    }
 
     return (
-        <div>
-            <form method="get" id="login-form" className="login-form" autoComplete="on" role="main">
-                <h1 className="a11y-hidden">Login Form</h1>
-                <div>
-                    <label className="label-username">
-                        <input type="text" className="text" name="Username" placeholder="Username" tabIndex="1" required />
-                        <span className="required">Username</span>
-                    </label>
+        <div className='rootDiv'>
+            <div className="header">
+                <div
+                    style={{
+                        height: "6vh",
+                        width: "4.5vw",
+                        backgroundImage: `url(${logo})`,
+                    }}
+                >
+
                 </div>
-                <input type="checkbox" name="show-password" className="show-password a11y-hidden" id="show-password" tabIndex="3" />
-                <label className="label-show-password" htmlFor="show-password">
-                    <span>Show Password</span>
-                </label>
-                <div>
-                    <label className="label-password">
-                        <input type="text" className="text" name="password" placeholder="Password" onBlur={() => setCloseEyes(false)} onFocus={() => setCloseEyes(true)} tabIndex="2" required />
-                        <span className="required">Password</span>
-                    </label>
-                </div>
-                <Input type="submit" value="Log In" />
-                <figure aria-hidden="true">
-                    <div className="person-body"></div>
-                    {
-                        closeEyes ? (
-                            <>
-                                <motion.div className="left-hand" animate={{ rotate: 25 }}><img src={palm} /></motion.div>
-                                <motion.div className="right-hand" animate={{ rotate: -25 }}><img src={palm} /></motion.div>
-                            </>
-                        ):(null)
-                    }
-                    <div className="neck skin"></div>
-                    <div className="head skin">
-                        <div className="eyes">
-                            <div className="pupil"></div>
-                        </div>
-                        <div className="mouth"></div>
+                EasyManage
+            </div>
+            <div className='screen'>
+                <form method="get" id="login-form" className="login-form" autoComplete="off" role="main">
+                    <div className='selectTypeMenu'>
+                        <label>
+                            <span>{formType === 'login' ? ('Login') : ('Register')} as:</span>
+                            <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                                {type}
+                            </Button>
+                        </label>
+                        <Menu
+                            id="simple-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={() => {
+                                setType('manager');
+                                handleClose()
+                            }}>MANAGER</MenuItem>
+                            <MenuItem onClick={() => {
+                                setType('employee')
+                                handleClose()
+                            }}>EMPLOYEE</MenuItem>
+                        </Menu>
+                        <label className="label-username">
+                            <Input type="text" className="text" placeholder="Username" tabIndex="1" required value={username} onChange={(e) => setUsename(e.target.value)} />
+                        </label>
+                        {
+                            formType === 'login' ? (
+                                null
+                            ) : (
+                                <label className="label-username">
+                                    <Input type="text" className="text" placeholder="Name" tabIndex="1" required value={name} onChange={(e) => setName(e.target.value)} />
+                                </label>
+                            )
+                        }
                     </div>
-                    <div className="hair"></div>
-                    <div className="ears"></div>
-                    <div className="shirt-1"></div>
-                    <div className="shirt-2"></div>
-                </figure>
-            </form>
+                    <input type="checkbox" name="show-password" className="show-password a11y-hidden" id="show-password" tabIndex="3" />
+                    <label className="label-show-password" htmlFor="show-password">
+                        <span onClick={()=>{
+                            seePassword?(setSeePassword(false)):(setSeePassword(true))
+                        }}>Show Password</span>
+                    </label>
+                    <div>
+                        <label className="label-password">
+                            <Input type={seePassword?("text"):("password")} className="text" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" onBlur={() => setCloseEyes(false)} onFocus={() => setCloseEyes(true)} tabIndex="2" required />
+                        </label>
+                    </div>
+                    {
+                        formType === 'login' ? (
+                            // <input type="submit" value="Log In" onClick={handelLogin} />
+                            <button >Log In</button>
+
+                        ) : (
+                            <button type="submit" onClick={handelRegister}>Register</button>
+                        )
+                    }
+                    <figure aria-hidden="true">
+                        <div className="person-body"></div>
+                        {
+                            closeEyes ? (
+                                <>
+                                    <motion.div className="left-hand" animate={{ rotate: 25 }}><img src={palm} /></motion.div>
+                                    <motion.div className="right-hand" animate={{ rotate: -25 }}><img src={palm} /></motion.div>
+                                </>
+                            ) : (null)
+                        }
+                        <div className="neck skin"></div>
+                        <div className={seePassword?("head skin see"):("head skin")}>
+                            <div className="eyes">
+                                <div className="pupil"></div>
+                            </div>
+                            <div className="mouth"></div>
+                        </div>
+                        <div className="hair"></div>
+                        <div className="ears"></div>
+                        <div className="shirt-1"></div>
+                        <div className="shirt-2"></div>
+                    </figure>
+                </form>
+                {
+                    formType === 'login' ? (
+                        <div>New to the System? Want to <span className='changeForm' onClick={() => { setFormType('signup') }}>Register</span></div>
+                    ) : (
+                        <div>Already Registered? Want to <span className='changeForm' onClick={() => { setFormType('login') }}>Login In</span></div>
+                    )
+                }
+            </div>
         </div>
     )
 }
