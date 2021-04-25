@@ -21,6 +21,8 @@ html, body {
 
 .rootDiv input,.rootDiv label{
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .label-username>div{
@@ -86,17 +88,17 @@ form {
   position: relative;
   overflow: hidden;
   width: 20%;
-  gap: 3vh;
+  gap: 2vh;
 }
 
 .selectTypeMenu{
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3vh;
+  gap: 2vh;
 }
 
-.selectTypeMenu>label{
+.selectTypeMenu>label:first-of-type{
   flex-direction: row;
   justify-content: flex-start;
 }
@@ -134,7 +136,6 @@ label > span {
   display: block;
   font-size: 0.825rem;
   margin-top: 0.625rem;
-  order: 1;
   transition: all 0.25s;
 }
 
@@ -280,7 +281,6 @@ figure {
   border-radius: 50%;
   height: 0;
   margin: auto auto;
-  margin-bottom: 2rem;
   order: 1;
   padding-top: 60%;
   position: relative;
@@ -559,4 +559,9 @@ figure .shirt-2 {
   text-decoration: underline;
   cursor: pointer;
   color: #0300AE;
+}
+
+button:disabled{
+  background-color: lightgray;
+  color: darkgray;
 }

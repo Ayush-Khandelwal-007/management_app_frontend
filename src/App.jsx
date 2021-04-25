@@ -15,12 +15,14 @@ function App() {
       <Router>
           <Switch>
             <Route path="/PMDashboard">
+              <div>PMDashboard</div>
               {/* {state.user ? (
                 state.userType === 1 ? (<StudentDashboard />) :
                   (<Redirect to="/Login" />)
               ) : <Redirect to="/Login" />} */}
             </Route>
             <Route path="/EMPDashboard">
+              <div>EMPDashboard</div>
               {/* {state.user ? (
                 state.userType === 2 ? (<FnA />) :
                   (<Redirect to="/Login" />)

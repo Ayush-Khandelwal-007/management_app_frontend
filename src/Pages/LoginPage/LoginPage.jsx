@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './styling.scss'
 import palm from '../../assets/hand.svg'
 import { motion } from "framer-motion";
@@ -8,17 +8,20 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import logo from '../../assets/logo.jpeg'
 import Axios from 'axios'
+import { useHistory } from 'react-router';
 
 function LoginPage() {
 
+    const history=useHistory();
     const [closeEyes, setCloseEyes] = useState(false);
-    const [seePassword,setSeePassword]=useState(false);
+    const [seePassword, setSeePassword] = useState(false);
     const [username, setUsename] = useState('');
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
     const [type, setType] = useState('manager');
     const [anchorEl, setAnchorEl] = useState(null);
     const [formType, setFormType] = useState('login')
+    const [loading ,setLoading] =useState(false)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -30,32 +33,80 @@ function LoginPage() {
 
     const handelRegister = (e) => {
         e.preventDefault();
-        if(type==='manager'){
+        setLoading(true);
+        if (type === 'manager') {
             Axios.post('http://localhost:4000/api/insertp', {
                 ProdUserName: username,
                 ProdName: name,
                 ProdPass: password,
-            }).then((res)=>{
-                if(res.data==='success'){
+            }).then((res) => {
+                if (res.data === 'success') {
                     setName('');
                     setUsename('');
                     setPassword('');
                     setFormType('login');
+                    setLoading(false);
                 }
+            }).catch((err)=>{
+                console.log(err);
             })
         }
-        else{
+        else {
             Axios.post('http://localhost:4000/api/inserte', {
                 EmpUserName: username,
                 EmpName: name,
                 EmpPass: password,
-            }).then((res)=>{
-                if(res.data==='success'){
+            }).then((res) => {
+                if (res.data === 'success') {
                     setName('');
                     setUsename('');
                     setPassword('');
                     setFormType('login');
+                    setLoading(false);
                 }
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }
+
+    }
+
+    const handelLogin =(e)=>{
+        e.preventDefault();
+        setLoading(true);
+        if (type === 'manager') {
+            Axios.get('http://localhost:4000/api/authp', {
+                params: {
+                    ProdUserName: username,
+                    ProdPass: password,
+                }
+            }).then((res) => {
+                setLoading(false);
+                if(parseInt(res.data)===1){
+                    console.log("success");
+                    history.push('/PMDashboard');
+                }
+            }).catch((err)=>{
+                setLoading(false);
+                console.log(err);
+            })
+        }
+        else {
+            Axios.get('http://localhost:4000/api/authe', {
+                params: {
+                    EmpUserName: username,
+                    EmpPass: password,
+                }
+            }).then((res) => {
+                setLoading(false);
+                if(parseInt(res.data)===1){
+                    console.log("success");
+                    history.push('/EMPDashboard');
+                }
+            })
+            .catch((err)=>{
+                setLoading(false);
+                console.log(err);
             })
         }
 
@@ -101,6 +152,7 @@ function LoginPage() {
                             }}>EMPLOYEE</MenuItem>
                         </Menu>
                         <label className="label-username">
+                            <span>USERNAME:</span>
                             <Input type="text" className="text" placeholder="Username" tabIndex="1" required value={username} onChange={(e) => setUsename(e.target.value)} />
                         </label>
                         {
@@ -108,6 +160,7 @@ function LoginPage() {
                                 null
                             ) : (
                                 <label className="label-username">
+                                    <span>NAME:</span>
                                     <Input type="text" className="text" placeholder="Name" tabIndex="1" required value={name} onChange={(e) => setName(e.target.value)} />
                                 </label>
                             )
@@ -115,22 +168,22 @@ function LoginPage() {
                     </div>
                     <input type="checkbox" name="show-password" className="show-password a11y-hidden" id="show-password" tabIndex="3" />
                     <label className="label-show-password" htmlFor="show-password">
-                        <span onClick={()=>{
-                            seePassword?(setSeePassword(false)):(setSeePassword(true))
+                        <span onClick={() => {
+                            seePassword ? (setSeePassword(false)) : (setSeePassword(true))
                         }}>Show Password</span>
                     </label>
                     <div>
                         <label className="label-password">
-                            <Input type={seePassword?("text"):("password")} className="text" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" onBlur={() => setCloseEyes(false)} onFocus={() => setCloseEyes(true)} tabIndex="2" required />
+                            <span>PASSWORD:</span>
+                            <Input type={seePassword ? ("text") : ("password")} className="text" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" onBlur={() => setCloseEyes(false)} onFocus={() => setCloseEyes(true)} tabIndex="2" required />
                         </label>
                     </div>
                     {
                         formType === 'login' ? (
-                            // <input type="submit" value="Log In" onClick={handelLogin} />
-                            <button >Log In</button>
+                            <button disabled={loading} onClick={handelLogin} >Log In</button>
 
                         ) : (
-                            <button type="submit" onClick={handelRegister}>Register</button>
+                            <button disabled={loading} onClick={handelRegister}>Register</button>
                         )
                     }
                     <figure aria-hidden="true">
@@ -144,7 +197,7 @@ function LoginPage() {
                             ) : (null)
                         }
                         <div className="neck skin"></div>
-                        <div className={seePassword?("head skin see"):("head skin")}>
+                        <div className={seePassword ? ("head skin see") : ("head skin")}>
                             <div className="eyes">
                                 <div className="pupil"></div>
                             </div>
