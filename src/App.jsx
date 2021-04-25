@@ -1,47 +1,59 @@
-import React, { useState} from "react";
+import React, { useEffect } from "react";
 import {
   HashRouter as Router,
-  // Redirect,
+  Redirect,
   Route,
   Switch,
 } from "react-router-dom";
 import './App.css';
-import Landing from "./Pages/Landing/Landing";
-import LoginPage from "./Pages/LoginPage/LoginPage";
+import { useUser } from "./contexts/user";
+import Landing from "./Pages/Landing";
+import LoginPage from "./Pages/LoginPage";
+import PMDashboard from "./Pages/PMDashboard"
 
 function App() {
+  const [state, dispatch] = useUser();
+
+  useEffect(() => {
+    const user = localStorage.getItem("user");
+    const type = localStorage.getItem("type");
+    if (user && type) {
+      dispatch({
+        type: "SET_USER",
+        user: JSON.parse(user),
+        userType: type,
+      });
+    }
+  }, [dispatch])
+
   return (
     <div className="App">
       <Router>
-          <Switch>
-            <Route path="/PMDashboard">
-              <div>PMDashboard</div>
-              {/* {state.user ? (
-                state.userType === 1 ? (<StudentDashboard />) :
-                  (<Redirect to="/Login" />)
-              ) : <Redirect to="/Login" />} */}
-            </Route>
-            <Route path="/EMPDashboard">
-              <div>EMPDashboard</div>
-              {/* {state.user ? (
-                state.userType === 2 ? (<FnA />) :
-                  (<Redirect to="/Login" />)
-              ) : <Redirect to="/Login" />} */}
-            </Route>
-            <Route path="/Login">
-              <LoginPage/>
-              {/* {
-                state.user === null ? (<Login />) : (
-                  state.userType === 1 && (<Redirect to="/studentDashboard" />) ||
-                  state.userType === 2 && (<Redirect to="/FnADashBoard" />) ||
-                  state.userType === 3 && (<Redirect to="/HODDashboard" />)
-                )
-              } */}
-            </Route>
-            <Route exact path="/">
-              <Landing />
-            </Route>
-          </Switch>
+        <Switch>
+          <Route path="/PMDashboard">
+
+            {state.user ? (
+              state.userType === 'manager' ? (<PMDashboard />) :
+                (<Redirect to="/Login" />)
+            ) : <Redirect to="/Login" />}
+          </Route>
+          <Route path="/EMPDashboard">
+            {state.user ? (
+              state.userType === 'employee' ? (<div>EMPDashboard</div>) :
+                (<Redirect to="/Login" />)
+            ) : <Redirect to="/Login" />}
+          </Route>
+          <Route path="/Login">
+            {
+              state.user === null ? (<LoginPage />) : (
+                state.userType === 'manager' ? (<Redirect to="/PMDashboard" />) : (<Redirect to="/EMPDashboard" />)
+              )
+            }
+          </Route>
+          <Route exact path="/">
+            <Landing />
+          </Route>
+        </Switch>
       </Router>
     </div>
   );

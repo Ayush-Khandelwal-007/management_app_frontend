@@ -2,9 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import reducer, { initialState } from "./contexts/reducer";
+import { StateProvider } from "./contexts/user";
 
 ReactDOM.render(
-    <App />,
+  <StateProvider initialState={initialState} reducer={reducer}>
+    <App />
+  </StateProvider>,
   document.getElementById('root')
 );
 
