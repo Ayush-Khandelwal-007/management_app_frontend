@@ -39,7 +39,7 @@ function App() {
           </Route>
           <Route path="/EMPDashboard">
             {state.user ? (
-              state.userType === 'employee' ? (<div>EMPDashboard</div>) :
+              state.userType === 'employee' ? (<PMDashboard />) :
                 (<Redirect to="/Login" />)
             ) : <Redirect to="/Login" />}
           </Route>
