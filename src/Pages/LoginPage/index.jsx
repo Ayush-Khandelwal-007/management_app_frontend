@@ -2,17 +2,20 @@ import React, { useState } from 'react';
 import './styling.scss'
 import palm from '../../assets/hand.svg'
 import { motion } from "framer-motion";
-import { Input } from '@material-ui/core';
+import { Input, Snackbar } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import logo from '../../assets/logo.jpeg'
 import Axios from 'axios'
 import { useHistory } from 'react-router';
+import { Alert } from '@material-ui/lab';
+import { useUser } from '../../contexts/user';
 
 function LoginPage() {
-
-    const history=useHistory();
+    const history = useHistory();
+    // eslint-disable-next-line
+    const [state, dispatch] = useUser();
     const [closeEyes, setCloseEyes] = useState(false);
     const [seePassword, setSeePassword] = useState(false);
     const [username, setUsename] = useState('');
@@ -21,7 +24,9 @@ function LoginPage() {
     const [type, setType] = useState('manager');
     const [anchorEl, setAnchorEl] = useState(null);
     const [formType, setFormType] = useState('login')
-    const [loading ,setLoading] =useState(false)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('');
+    const [openSnack, setOpenSnack] = useState(false);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -47,7 +52,10 @@ function LoginPage() {
                     setFormType('login');
                     setLoading(false);
                 }
-            }).catch((err)=>{
+            }).catch((err) => {
+                setError('This Username is already in use ,try something else!')
+                setOpenSnack(true);
+                setLoading(false);
                 console.log(err);
             })
         }
@@ -64,14 +72,17 @@ function LoginPage() {
                     setFormType('login');
                     setLoading(false);
                 }
-            }).catch((err)=>{
+            }).catch((err) => {
+                setError('This Username is already in usetry something else!')
+                setOpenSnack(true);
+                setLoading(false);
                 console.log(err);
             })
         }
 
     }
 
-    const handelLogin =(e)=>{
+    const handelLogin = (e) => {
         e.preventDefault();
         setLoading(true);
         if (type === 'manager') {
@@ -82,11 +93,31 @@ function LoginPage() {
                 }
             }).then((res) => {
                 setLoading(false);
-                if(parseInt(res.data)===1){
+                if (parseInt(res.data.result) === 1) {
                     console.log("success");
+                    dispatch({
+                        type: "SET_USER",
+                        user: {
+                            name: res.data.name,
+                            username: res.data.username
+                        },
+                        userType: type,
+                    });
+                    localStorage.setItem("type", type.toString());
+                    localStorage.setItem("user", JSON.stringify({
+                        name: res.data.name,
+                        username: res.data.username
+                    }));
                     history.push('/PMDashboard');
                 }
-            }).catch((err)=>{
+                if (parseInt(res.data.result) === 2) {
+                    setError('Wrong Password Entered!')
+                    setOpenSnack(true);
+                    setLoading(false);
+                }
+            }).catch((err) => {
+                setError('No account with this username exist!')
+                setOpenSnack(true);
                 setLoading(false);
                 console.log(err);
             })
@@ -99,21 +130,53 @@ function LoginPage() {
                 }
             }).then((res) => {
                 setLoading(false);
-                if(parseInt(res.data)===1){
+                if (parseInt(res.data.result) === 1) {
                     console.log("success");
+                    dispatch({
+                        type: "SET_USER",
+                        user: {
+                            name: res.data.name,
+                            username: res.data.username
+                        },
+                        userType: type,
+                    });
+                    localStorage.setItem("type", type.toString());
+                    localStorage.setItem("user", JSON.stringify({
+                        name: res.data.name,
+                        username: res.data.username
+                    }));
                     history.push('/EMPDashboard');
                 }
+                if (parseInt(res.data.result) === 2) {
+                    setError('Wrong Password Entered!')
+                    setOpenSnack(true);
+                    setLoading(false);
+                }
             })
-            .catch((err)=>{
-                setLoading(false);
-                console.log(err);
-            })
+                .catch((err) => {
+                    setError('No account with this username exist!')
+                    setOpenSnack(true);
+                    setLoading(false);
+                    console.log(err);
+                })
         }
 
     }
+    const handleCloseSnack = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenSnack(false);
+    };
 
     return (
         <div className='rootDiv'>
+            <Snackbar open={openSnack} autoHideDuration={4000} onClose={handleCloseSnack}>
+                <Alert className='snackbarDiv' severity="error">
+                    <strong>{error}</strong>
+                </Alert>
+            </Snackbar>
             <div className="header">
                 <div
                     style={{
@@ -153,7 +216,7 @@ function LoginPage() {
                         </Menu>
                         <label className="label-username">
                             <span>USERNAME:</span>
-                            <Input type="text" className="text" placeholder="Username" tabIndex="1" required value={username} onChange={(e) => setUsename(e.target.value)} />
+                            <Input type="text" className="text" placeholder="Username" tabIndex="1" required value={username} onChange={(e) => setUsename(e.target.value.toLowerCase())} />
                         </label>
                         {
                             formType === 'login' ? (
@@ -180,10 +243,10 @@ function LoginPage() {
                     </div>
                     {
                         formType === 'login' ? (
-                            <button disabled={loading} onClick={handelLogin} >Log In</button>
+                            <button type='submit' disabled={loading} onClick={handelLogin} >Log In</button>
 
                         ) : (
-                            <button disabled={loading} onClick={handelRegister}>Register</button>
+                            <button type='submit' disabled={loading} onClick={handelRegister}>Register</button>
                         )
                     }
                     <figure aria-hidden="true">
@@ -191,8 +254,8 @@ function LoginPage() {
                         {
                             closeEyes ? (
                                 <>
-                                    <motion.div className="left-hand" animate={{ rotate: 25 }}><img src={palm} /></motion.div>
-                                    <motion.div className="right-hand" animate={{ rotate: -25 }}><img src={palm} /></motion.div>
+                                    <motion.div className="left-hand" animate={{ rotate: 25 }}><img src={palm} alt='palm' /></motion.div>
+                                    <motion.div className="right-hand" animate={{ rotate: -25 }}><img src={palm} alt='palm' /></motion.div>
                                 </>
                             ) : (null)
                         }
