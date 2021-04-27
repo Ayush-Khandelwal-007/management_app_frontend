@@ -168,3 +168,23 @@
     max-height: 20vh;
     width: 50vw;
   }
+
+  .deleteIcon{
+    cursor: pointer;
+  }
+
+  .deleteIcon:hover{
+    color: red;
+  }
+
+  .AddButton{
+    background-color: #24B22A !important;
+    padding: 2vh 2vw !important;
+    color: white !important;
+  }
+
+  .DeleteButton{
+    background-color: #B22424 !important;
+    padding: 2vh 2vw !important;
+    color: white !important;
+  }

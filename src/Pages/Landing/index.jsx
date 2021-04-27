@@ -4,9 +4,11 @@ import WelcomeImage from '../../assets/Untitled.svg'
 import logo from '../../assets/logo.jpeg'
 import { useHistory } from "react-router-dom"
 import { motion } from "framer-motion"
+import { useUser } from '../../contexts/user'
 
 function Landing() {
     let history = useHistory();
+    const [state, dispatch] = useUser();
 
     const goToLoginPage = () => {
         history.push('/Login');
@@ -44,7 +46,9 @@ function Landing() {
                     animate={{ x: "0vh" }}
                     transition={{ duration: 0.2 }}
                 >
-                    GO TO LOGIN PAGE
+                    {
+                        state.user ? ("GO TO DASHBOARD"):("GO TO LOGIN PAGE")
+                    }
             </motion.button>
             </div>
         </div>
