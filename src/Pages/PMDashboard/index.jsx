@@ -35,8 +35,7 @@ function PMDashboard() {
                 EmpUserName:emp.EmpUserName
             }
         }).then((result)=>{
-            console.log(result)
-            fetchTeamMembers()
+            fetchTeamMembers(selectedTeam);
         }).catch((err)=>{
             console.log(err)
         })
@@ -48,7 +47,6 @@ function PMDashboard() {
                 TeamName: selectedTeam.TeamName,
             }
         }).then((result) => {
-            console.log(result)
             setOpenTeamDialog(false)
             fetch();
         }
@@ -64,7 +62,6 @@ function PMDashboard() {
             fetch();
             fetchTeamMembers(selectedTeam);
             openEmployeeList();
-            console.log(res)
         }).catch((err) => {
             console.log(err)
         })
@@ -76,7 +73,6 @@ function PMDashboard() {
                 TName: selectedTeam.TeamName
             }
         }).then((res) => {
-            console.log(res.data)
             setOtherEmployees(res.data)
             setEmployeeListDialog(true)
         }).catch((err) => {
@@ -92,7 +88,6 @@ function PMDashboard() {
         }).then((res) => {
             setTeamMembers(res.data);
             setOpenTeamDialog(true);
-            console.log(res.data)
         }).catch((err) => {
             console.error(err);
         })
@@ -105,7 +100,6 @@ function PMDashboard() {
             }
         }).then((res) => {
             setTeams(res.data);
-            console.log(res.data)
         }).catch((err) => {
             console.error(err);
         })
@@ -214,7 +208,7 @@ function PMDashboard() {
                 </div>
             </div>
             <div className={styles.screen}>
-                <h1> Your Teams list</h1>
+                <h1>Teams</h1>
                 <div className={styles.cardContainer}>
                     <div><Card addNew={true} clickHandel={()=>setOpenAddNew(true)} /></div>
                     {
