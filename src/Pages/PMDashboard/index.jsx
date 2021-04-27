@@ -231,7 +231,7 @@ function PMDashboard() {
                                         {row.EmpUserName}
                                     </TableCell>
                                     <TableCell component="th" scope="row" align="left">{row.EmpName}</TableCell>
-                                    <TableCell button align="right" onClick={()=>deleteFromTeam(row)}><DeleteTwoToneIcon /></TableCell>
+                                    <TableCell align="right" onClick={()=>deleteFromTeam(row)}><DeleteTwoToneIcon /></TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -288,7 +288,7 @@ function PMDashboard() {
                     <Button
                         aria-controls="simple-menu"
                         aria-haspopup="true"
-                        onClick={()=>handleClick()}
+                        onClick={(e)=>handleClick(e)}
                     >
                         <Avatar />
                     </Button>

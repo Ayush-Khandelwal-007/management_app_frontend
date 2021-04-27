@@ -10,6 +10,7 @@ import { useUser } from "./contexts/user";
 import Landing from "./Pages/Landing";
 import LoginPage from "./Pages/LoginPage";
 import PMDashboard from "./Pages/PMDashboard"
+import EMPDashboard from "./Pages/EMPDashboard"
 
 function App() {
   const [state, dispatch] = useUser();
@@ -39,7 +40,7 @@ function App() {
           </Route>
           <Route path="/EMPDashboard">
             {state.user ? (
-              state.userType === 'employee' ? (<PMDashboard />) :
+              state.userType === 'employee' ? (<EMPDashboard />) :
                 (<Redirect to="/Login" />)
             ) : <Redirect to="/Login" />}
           </Route>
