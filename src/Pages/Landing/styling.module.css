@@ -12,13 +12,13 @@
 .header{
     display: flex;
     width: 100%;
-    background-color: #F43591;
+    background-color: #000;
     align-items: center;
     font-size: calc(4px + 2vw);
     padding: 2vh;
     gap: 3vw;
     font-family:'Zen Dots', cursive; ;
-    color:#0300AE;
+    color:#fff;
 }
 
 .header>img{

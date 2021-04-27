@@ -1,6 +1,10 @@
 html, body {
   align-items: center;
-  background: #00FFFF;
+  // background: #00FFFF;
+  background-image: url(https://wallpaperaccess.com/full/566121.jpg);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
   border: 0;
   display: flex;
   font-family: Helvetica, Arial, sans-serif;
@@ -35,13 +39,13 @@ html, body {
   z-index: 100;
   display: flex;
   width: 100%;
-  background-color: #F43591;
+  background-color: black;
   align-items: center;
   font-size: calc(4px + 2vw);
   padding: 1%;
   gap: 3vw;
   font-family:'Zen Dots', cursive; ;
-  color:#0300AE;
+  color:white;
 }
 
 .header>div{
@@ -558,7 +562,7 @@ figure .shirt-2 {
 .changeForm{
   text-decoration: underline;
   cursor: pointer;
-  color: #0300AE;
+  color: #9e9cf5;
 }
 
 button:disabled{
@@ -572,4 +576,8 @@ button:disabled{
 
 .snackbarDiv div{
   color: white !important;
+}
+
+form+div{
+  color: white;
 }

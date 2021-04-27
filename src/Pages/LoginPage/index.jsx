@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './styling.scss'
 import palm from '../../assets/hand.svg'
 import { motion } from "framer-motion";
-import { Input, Snackbar } from '@material-ui/core';
+import { Input, Snackbar, TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -215,16 +215,14 @@ function LoginPage() {
                             }}>EMPLOYEE</MenuItem>
                         </Menu>
                         <label className="label-username">
-                            <span>USERNAME:</span>
-                            <Input type="text" className="text" placeholder="Username" tabIndex="1" required value={username} onChange={(e) => setUsename(e.target.value.toLowerCase())} />
+                            <TextField label="USERNAME" className="text" value={username} onChange={(e) => setUsename(e.target.value)} />
                         </label>
                         {
                             formType === 'login' ? (
                                 null
                             ) : (
                                 <label className="label-username">
-                                    <span>NAME:</span>
-                                    <Input type="text" className="text" placeholder="Name" tabIndex="1" required value={name} onChange={(e) => setName(e.target.value)} />
+                                    <TextField label="NAME" className="text" value={name} onChange={(e) => setName(e.target.value)} />
                                 </label>
                             )
                         }
@@ -237,8 +235,7 @@ function LoginPage() {
                     </label>
                     <div>
                         <label className="label-password">
-                            <span>PASSWORD:</span>
-                            <Input type={seePassword ? ("text") : ("password")} className="text" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" onBlur={() => setCloseEyes(false)} onFocus={() => setCloseEyes(true)} tabIndex="2" required />
+                            <TextField type={seePassword ? ("text") : ("password")} label="PASSWORD" className="text" alue={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" onBlur={() => setCloseEyes(false)} onFocus={() => setCloseEyes(true)}/>
                         </label>
                     </div>
                     {
