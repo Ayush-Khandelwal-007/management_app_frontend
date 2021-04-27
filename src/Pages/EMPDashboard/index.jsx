@@ -49,10 +49,6 @@ function PMDashboard() {
         })
     }
 
-    const handleClickOpen = () => {
-        setOpenTeamDialog(true);
-    };
-
     const handleCloseTeamDialog = () => {
         arrangeDialog(selectedTeam);
         openTeamDialog(false);
