@@ -172,9 +172,9 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                         </>
                     ) : (
                         <>
-                            <div style={{flexDirection:"column",gap:"3vh"}}>
+                            <div style={{flexDirection:"column",gap:"3vh",display:"flex"}}>
                             <div>No Project Assigned Yet</div>
-                            <Button className={styles.ReplaceButton} onClick={() => { setOpenAddProjectDialog(true) }}>Add Project File</Button>
+                            <Button className={styles.ReplaceButton} style={{width :"20vw"}} onClick={() => { setOpenAddProjectDialog(true) }}>Add Project File</Button>
                             </div>
                         </>
                     )
