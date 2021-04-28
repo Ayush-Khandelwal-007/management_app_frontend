@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './styling.scss'
 import palm from '../../assets/hand.svg'
 import { motion } from "framer-motion";
-import { Input, Snackbar, TextField } from '@material-ui/core';
+import { Snackbar, TextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';

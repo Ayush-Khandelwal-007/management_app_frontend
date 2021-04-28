@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styles from './styles.module.css'
 import logo from '../../assets/logo.jpeg'
 import Card from './Card'
-import { AppBar, Avatar, Button, Dialog, IconButton, Menu, MenuItem, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from '@material-ui/core'
+import { AppBar, Avatar, Button, Dialog, Divider, IconButton, Menu, MenuItem, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from '@material-ui/core'
 import { useHistory } from 'react-router'
 import { useUser } from '../../contexts/user'
 import axios from 'axios'
@@ -116,6 +116,24 @@ function PMDashboard() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Divider style={{ background: "white" }} />
+
+                <div className={styles.FileDiv}>
+                    {
+                        selectedTeam.Project ? (
+                            <>
+                                <div>Project Assigned On: <u><strong>{selectedTeam.Date}</strong></u></div>
+                                <div className={styles.buttonBox}>
+                                    <Button className={styles.ReplaceButton}><a target="_blank" href={selectedTeam.Project}>See Project</a></Button>
+                                </div>
+                            </>
+                        ) : (
+                            <div>No Project Assigned Yet</div>
+                        )
+                    }
+
+
+                </div>
             </Dialog>
             <div className={styles.header}>
                 <div>
@@ -133,7 +151,7 @@ function PMDashboard() {
                     <Button
                         aria-controls="simple-menu"
                         aria-haspopup="true"
-                        onClick={(e)=>handleClick(e)}
+                        onClick={(e) => handleClick(e)}
                     >
                         <Avatar />
                     </Button>

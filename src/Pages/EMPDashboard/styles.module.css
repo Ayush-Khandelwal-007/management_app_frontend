@@ -159,6 +159,7 @@
 
   .table{
     margin: 0px 10vw;
+    margin-bottom: 3vh;
     width: 80vw !important;
     max-height: 60vh;
   }
@@ -174,4 +175,32 @@
   .employeeList{
     max-height: 20vh;
     width: 50vw;
+  }
+
+  .FileDiv{
+    margin-top: 4vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .FileDiv>div{
+    padding: 0px 10vw;
+    font-size: 2vw;
+    color:#bbfdbe;
+  }
+
+  .ReplaceButton{
+    background-color: #b0b224 !important;
+    padding: 2vh 2vw !important;
+    color: white !important;
+  }
+
+  .ReplaceButton a{
+    text-decoration: none;
+    color: white;
+
+  }
+
+  .ReplaceButton a:visited{
+    color: white;
   }
