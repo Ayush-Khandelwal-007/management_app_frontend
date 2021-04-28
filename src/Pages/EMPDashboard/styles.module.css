@@ -204,3 +204,8 @@
   .ReplaceButton a:visited{
     color: white;
   }
+
+  .prodname{
+    font-size: calc(2px + 1.4vw);
+    color: #b0b224;
+  }

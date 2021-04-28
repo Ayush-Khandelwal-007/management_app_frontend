@@ -20,6 +20,7 @@ function PMDashboard() {
     const [teamMembers, setTeamMembers] = useState([]);
     const [openTeamDialog, setOpenTeamDialog] = useState(false);
     const [selectedTeam, setSelectedTeam] = useState({});
+    const [selectedTeamInfo, setSelectedTeamInfo] = useState({});
 
     const fetch = () => {
         axios.get('http://localhost:4000/api/view_Employee_to_team', {
@@ -34,7 +35,21 @@ function PMDashboard() {
         })
     }
 
+    const fetchTeamData=(team)=>{
+        axios.get('http://localhost:4000/api/team', {
+            params: {
+                TeamName:team
+            }
+        }).then((res) => {
+            setSelectedTeamInfo(res.data);
+            console.log(res.data)
+        }).catch((err) => {
+            console.error(err);
+        })
+    }
+
     const arrangeDialog = (team) => {
+        fetchTeamData(team.TeamName);
         setOpenTeamDialog(true);
         setSelectedTeam(team);
         axios.get('http://localhost:4000/api/view_t_Employee', {
@@ -92,7 +107,7 @@ function PMDashboard() {
                     </Toolbar>
                 </AppBar>
                 <div className={styles.dialogHeading}>
-                    {selectedTeam.TeamName}
+                    {selectedTeam.TeamName} <small className={styles.prodname}>{"  -  "+selectedTeamInfo.ProdUserName}</small>
                 </div>
                 <TableContainer component={Paper} className={styles.table} >
                     <Table aria-label="customized table">

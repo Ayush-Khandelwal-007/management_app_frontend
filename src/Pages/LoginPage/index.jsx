@@ -73,7 +73,7 @@ function LoginPage() {
                     setLoading(false);
                 }
             }).catch((err) => {
-                setError('This Username is already in usetry something else!')
+                setError('This Username is already in use ,try something else!')
                 setOpenSnack(true);
                 setLoading(false);
                 console.log(err);
@@ -273,7 +273,7 @@ function LoginPage() {
                     formType === 'login' ? (
                         <div>New to the System? Want to <span className='changeForm' onClick={() => { setFormType('signup') }}>Register</span></div>
                     ) : (
-                        <div>Already Registered? Want to <span className='changeForm' onClick={() => { setFormType('login') }}>Login In</span></div>
+                        <div>Already Registered? Want to <span className='changeForm' onClick={() => { setFormType('login') }}>Login</span></div>
                     )
                 }
             </div>
