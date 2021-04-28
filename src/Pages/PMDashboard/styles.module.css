@@ -23,7 +23,6 @@
     justify-content: space-between;
     align-items: center;
     font-size: calc(4px + 2vw);
-    padding: 1%;
     font-family:'Zen Dots', cursive; 
     color:white;
   }
@@ -32,6 +31,7 @@
     display: flex;
     gap: 3vw;
     align-items: center;
+    margin: 2vh 2vw;
   }
   
   .header>div>div{
@@ -142,7 +142,7 @@
   .dialogHeading{
     width: 100%;
     font-size: calc(4px + 2vw);
-    color:rgb(37, 33, 44);
+    color:rgb(92 0 252);
     font-family:'Zen Dots', cursive; 
     margin-bottom: 2vh;
     margin-top: 4vh;

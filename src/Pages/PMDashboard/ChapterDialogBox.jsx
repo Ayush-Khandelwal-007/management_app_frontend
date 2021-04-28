@@ -157,21 +157,26 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                 <Button className={styles.AddButton} onClick={() => openEmployeeList()}>Add Members</Button>
                 <Button className={styles.DeleteButton} onClick={() => DeleteTeam()}>Delete Team</Button>
             </div>
-            <Divider style={{background:"white"}}/>
+            <Divider style={{ background: "white" }} />
             <div className={styles.FileDiv}>
                 {
                     selectedTeam.Project ? (
                         <>
                             <div>Project Assigned On: <u><strong>{selectedTeam.Date}</strong></u></div>
                             <div className={styles.buttonBox}>
-                                <Button className={styles.ReplaceButton} onClick={() => { setOpenAddProjectDialog(true) }}>{selectedTeam === "" ? ("Add Project File") : ("Replace Project File")}</Button>
+                                <Button className={styles.ReplaceButton} onClick={() => { setOpenAddProjectDialog(true) }}>"Replace Project File</Button>
                                 {
                                     selectedTeam.Project === "" ? (null) : (<Button className={styles.ReplaceButton}><a target="_blank" href={selectedTeam.Project}>See Project</a></Button>)
                                 }
                             </div>
                         </>
                     ) : (
-                        <div>No Project Assigned Yet</div>
+                        <>
+                            <div style={{flexDirection:"column",gap:"3vh"}}>
+                            <div>No Project Assigned Yet</div>
+                            <Button className={styles.ReplaceButton} onClick={() => { setOpenAddProjectDialog(true) }}>Add Project File</Button>
+                            </div>
+                        </>
                     )
                 }
 
