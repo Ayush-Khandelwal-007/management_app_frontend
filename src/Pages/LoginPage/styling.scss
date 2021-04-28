@@ -42,7 +42,6 @@ html, body {
   background-color: black;
   align-items: center;
   font-size: calc(4px + 2vw);
-  padding: 1%;
   gap: 3vw;
   font-family:'Zen Dots', cursive; ;
   color:white;
@@ -51,7 +50,7 @@ html, body {
 .header>div{
   background-size: 100% 100%;
   background-position: center center;
-  margin-left: 2%;
+    margin: 2vh 2vw;
   border-radius: 50%;
   border: 1px solid rgb(74, 237, 74);
 }
