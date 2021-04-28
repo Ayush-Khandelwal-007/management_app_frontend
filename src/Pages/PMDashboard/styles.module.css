@@ -195,3 +195,31 @@
     padding: 2vh 2vw !important;
     color: white !important;
   }
+
+  .FileDiv{
+    margin-top: 4vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .FileDiv>div{
+    padding: 0px 10vw;
+    font-size: 2vw;
+    color:#bbfdbe;
+  }
+
+  .ReplaceButton{
+    background-color: #b0b224 !important;
+    padding: 2vh 2vw !important;
+    color: white !important;
+  }
+
+  .ReplaceButton a{
+    text-decoration: none;
+    color: white;
+
+  }
+
+  .ReplaceButton a:visited{
+    color: white;
+  }
