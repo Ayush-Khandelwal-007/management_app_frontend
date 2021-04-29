@@ -9,7 +9,6 @@ import axios from 'axios'
 import { Alert } from '@material-ui/lab'
 import ChapterDialogBox from './ChapterDialogBox'
 import AddTeamDialog from './AddTeamDialog'
-import { ControlPointDuplicateOutlined } from '@material-ui/icons'
 
 function PMDashboard() {
     const history = useHistory();
@@ -162,6 +161,8 @@ function PMDashboard() {
                 setTeamMembers={setTeamMembers}
                 selectedTeam={selectedTeam}
                 openEmployeeList={openEmployeeList}
+                fetch={fetch}
+                teams={teams}
             />
             <Snackbar open={openSnack} autoHideDuration={4000} onClose={handleCloseSnack}>
                 <Alert className={styles.snackbarDiv} severity="error">
@@ -175,6 +176,7 @@ function PMDashboard() {
                 setOpenSnack={setOpenSnack}
                 setError={setError}
                 openAddNew={openAddNew}
+                fetch={fetch}
             />
             <div className={styles.header}>
                 <div>

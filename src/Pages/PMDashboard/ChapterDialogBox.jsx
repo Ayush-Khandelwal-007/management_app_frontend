@@ -2,22 +2,23 @@ import React, { useState } from 'react'
 import styles from './styles.module.css'
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
-import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, List, ListItem, ListItemText, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, List, ListItem, ListItemText, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from '@material-ui/core';
 import FileUpload from './FileUpload';
 import { storage } from "../../firebase"
 import axios from 'axios';
-import { useHistory } from 'react-router';
+import { Error } from '@material-ui/icons';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, deleteFromTeam, DeleteTeam, addInTeam, openTeamDialog, employeeListDialog, setEmployeeListDialog, setOtherEmployees, setOpenTeamDialog, setSelectedTeam, setTeamMembers, selectedTeam, openEmployeeList }) {
+function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, deleteFromTeam, DeleteTeam, addInTeam, openTeamDialog, employeeListDialog, setEmployeeListDialog, setOtherEmployees, setOpenTeamDialog, setSelectedTeam, setTeamMembers, selectedTeam, openEmployeeList, fetch, teams }) {
 
-    const history = useHistory();
     const [openAddProjectDialog, setOpenAddProjectDialog] = useState(false);
     const [selectedFile, setSelectedFile] = useState();
     const [enabled, setEnabled] = useState(false)
+    const [openDeleteTeam,setOpenDeleteTeam]=useState(false);
+    const [loading,setLoading]=useState(false);
 
     const TodaysDate = () => {
         var today = new Date();
@@ -36,9 +37,8 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
         return today;
     }
 
-    console.log(TodaysDate());
-
     const upload = () => {
+        setLoading(true);
         const uploadTask = storage.ref(`projects/${selectedFile.name}`).put(selectedFile);
         uploadTask.on(
             "state_changed",
@@ -48,21 +48,26 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                 console.log(error);
             },
             () => {
-                console.log("hi")
                 storage
                     .ref("projects")
                     .child(selectedFile.name)
                     .getDownloadURL()
                     .then((url) => {
-                        console.log(url);
                         axios.put('http://localhost:4000/api/assign_project', {
                             Project: url,
                             Date: TodaysDate(),
                             TeamName: selectedTeam.TeamName,
                         })
-                        setEnabled(false);
-                        setOpenAddProjectDialog(false);
-                        setSelectedFile(null);
+                        .then((result)=>{
+                            setLoading(false);
+                            setEnabled(false);
+                            setOpenAddProjectDialog(false);
+                            setSelectedFile(null);
+                            fetch();
+                            setSelectedTeam({ ...selectedTeam, Date: TodaysDate(), Project: url })
+                        }).catch((err)=>{
+                            console.log(Error)
+                        })
                     });
             }
         );
@@ -70,6 +75,32 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
 
     return (
         <Dialog className={styles.dialogPaper} fullScreen open={openTeamDialog} onClose={handleCloseTeamDialog} TransitionComponent={Transition}>
+            <Dialog
+                open={openDeleteTeam}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete this team?"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        This step cannot be undone.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={()=>setOpenDeleteTeam(false)} color="primary">
+                        No
+                    </Button>
+                    <Button 
+                        onClick={() => {
+                            DeleteTeam();
+                            setOpenDeleteTeam(false)
+                        }} 
+                        color="primary"
+                    >
+                        Yes
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
 
             <Dialog open={employeeListDialog} aria-labelledby="form-dialog-title">
@@ -102,14 +133,19 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                 <DialogTitle id="form-dialog-title">Select the project file</DialogTitle>
                 <Divider />
                 <DialogContent>
-                    <FileUpload setSelectedFile={setSelectedFile} setEnabled={setEnabled} selectedFile={selectedFile} enabled={enabled} />
+                    {
+                        loading===true?(<div style={{width:"60vw"}}>LOADING...</div>):(
+                            <FileUpload setSelectedFile={setSelectedFile} setEnabled={setEnabled} selectedFile={selectedFile} enabled={enabled} />
+                        )
+                    }
+                    
                 </DialogContent>
                 <Divider />
                 <DialogActions>
-                    <Button onClick={() => { setOpenAddProjectDialog(false) }} color="primary">
+                    <Button disabled={loading} onClick={() => { setOpenAddProjectDialog(false) }} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={() => { upload() }} disabled={!enabled} color="primary">
+                    <Button onClick={() => { upload() }} disabled={(!enabled)||(loading)} color="primary">
                         Upload
                     </Button>
                 </DialogActions>
@@ -155,7 +191,9 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
             </TableContainer>
             <div className={styles.buttonBox}>
                 <Button className={styles.AddButton} onClick={() => openEmployeeList()}>Add Members</Button>
-                <Button className={styles.DeleteButton} onClick={() => DeleteTeam()}>Delete Team</Button>
+                <Button className={styles.DeleteButton} onClick={()=>setOpenDeleteTeam(true)} >Delete Team</Button>
+
+
             </div>
             <Divider style={{ background: "white" }} />
             <div className={styles.FileDiv}>
@@ -164,17 +202,17 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                         <>
                             <div>Project Assigned On: <u><strong>{selectedTeam.Date}</strong></u></div>
                             <div className={styles.buttonBox}>
-                                <Button className={styles.ReplaceButton} onClick={() => { setOpenAddProjectDialog(true) }}>"Replace Project File</Button>
+                                <Button className={styles.ReplaceButton} onClick={() => { setOpenAddProjectDialog(true) }}>Replace Project File</Button>
                                 {
-                                    selectedTeam.Project === "" ? (null) : (<Button className={styles.ReplaceButton}><a target="_blank" href={selectedTeam.Project}>See Project</a></Button>)
+                                    selectedTeam.Project === "" ? (null) : (<Button className={styles.ReplaceButton}><a rel="noreferrer" target="_blank" href={selectedTeam.Project}>See Project</a></Button>)
                                 }
                             </div>
                         </>
                     ) : (
                         <>
-                            <div style={{flexDirection:"column",gap:"3vh",display:"flex"}}>
-                            <div>No Project Assigned Yet</div>
-                            <Button className={styles.ReplaceButton} style={{width :"20vw"}} onClick={() => { setOpenAddProjectDialog(true) }}>Add Project File</Button>
+                            <div style={{ flexDirection: "column", gap: "3vh", display: "flex" }}>
+                                <div>No Project Assigned Yet</div>
+                                <Button className={styles.ReplaceButton} style={{ width: "20vw" }} onClick={() => { setOpenAddProjectDialog(true) }}>Add Project File</Button>
                             </div>
                         </>
                     )
