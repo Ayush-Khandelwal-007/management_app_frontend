@@ -38,6 +38,17 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
         return today;
     }
 
+    const DeleteProject =()=>{
+        axios.put(`${url}api/remove_Project`, {
+            TeamName: selectedTeam.TeamName,
+        }).then((result)=>{
+            setSelectedTeam({ ...selectedTeam, Date:'', Project: ''})
+            fetch();
+        }).catch((err)=>{
+            console.log(err)
+        })
+    }
+
     const upload = () => {
         setLoading(true);
         const uploadTask = storage.ref(`projects/${selectedFile.name}`).put(selectedFile);
@@ -54,7 +65,7 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                     .child(selectedFile.name)
                     .getDownloadURL()
                     .then((urli) => {
-                        axios.put(`${url}pi/assign_project`, {
+                        axios.put(`${url}api/assign_project`, {
                             Project: urli,
                             Date: TodaysDate(),
                             TeamName: selectedTeam.TeamName,
@@ -204,9 +215,8 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                             <div>Project Assigned On: <u><strong>{selectedTeam.Date}</strong></u></div>
                             <div className={styles.buttonBox}>
                                 <Button className={styles.ReplaceButton} onClick={() => { setOpenAddProjectDialog(true) }}>Replace Project File</Button>
-                                {
-                                    selectedTeam.Project === "" ? (null) : (<Button className={styles.ReplaceButton}><a rel="noreferrer" target="_blank" href={selectedTeam.Project}>See Project</a></Button>)
-                                }
+                                <Button className={styles.ReplaceButton}><a rel="noreferrer" target="_blank" href={selectedTeam.Project}>See Project</a></Button>
+                                <Button className={styles.DeleteButton} onClick={()=>{DeleteProject()}} >Remove Project</Button>
                             </div>
                         </>
                     ) : (
