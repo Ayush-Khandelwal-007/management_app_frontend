@@ -7,6 +7,7 @@ import FileUpload from './FileUpload';
 import { storage } from "../../firebase"
 import axios from 'axios';
 import { Error } from '@material-ui/icons';
+import {url} from '../../constants';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -52,9 +53,9 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                     .ref("projects")
                     .child(selectedFile.name)
                     .getDownloadURL()
-                    .then((url) => {
-                        axios.put('http://localhost:4000/api/assign_project', {
-                            Project: url,
+                    .then((urli) => {
+                        axios.put(`${url}pi/assign_project`, {
+                            Project: urli,
                             Date: TodaysDate(),
                             TeamName: selectedTeam.TeamName,
                         })
@@ -64,7 +65,7 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                             setOpenAddProjectDialog(false);
                             setSelectedFile(null);
                             fetch();
-                            setSelectedTeam({ ...selectedTeam, Date: TodaysDate(), Project: url })
+                            setSelectedTeam({ ...selectedTeam, Date: TodaysDate(), Project: urli })
                         }).catch((err)=>{
                             console.log(Error)
                         })
