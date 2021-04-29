@@ -53,10 +53,12 @@ function LoginPage() {
                     setFormType('login');
                     setLoading(false);
                 }
+                else{
+                    setError('This Username is already in use ,try something else!')
+                    setOpenSnack(true);
+                    setLoading(false);
+                }
             }).catch((err) => {
-                setError('This Username is already in use ,try something else!')
-                setOpenSnack(true);
-                setLoading(false);
                 console.log(err);
             })
         }
@@ -73,10 +75,12 @@ function LoginPage() {
                     setFormType('login');
                     setLoading(false);
                 }
+                else{
+                    setError('This Username is already in use ,try something else!')
+                    setOpenSnack(true);
+                    setLoading(false);
+                }
             }).catch((err) => {
-                setError('This Username is already in use ,try something else!')
-                setOpenSnack(true);
-                setLoading(false);
                 console.log(err);
             })
         }
