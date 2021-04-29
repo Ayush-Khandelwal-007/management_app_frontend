@@ -8,8 +8,6 @@ function AddTeamDialog({teamName,setTeamName,setOpenAddNew,setOpenSnack,setError
     // eslint-disable-next-line
     const [state, dispatch] = useUser();
     const addTeam = () => {
-        console.log(teamName)
-        console.log(state.user.username)
         axios.post('http://localhost:4000/api/insertt', { ProdUserName: state.user.username, TeamName: teamName })
             .then(() => {
                 setTeamName('');

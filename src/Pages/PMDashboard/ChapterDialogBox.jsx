@@ -7,6 +7,7 @@ import FileUpload from './FileUpload';
 import { storage } from "../../firebase"
 import axios from 'axios';
 import { useHistory } from 'react-router';
+import { Error } from '@material-ui/icons';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -19,6 +20,7 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
     const [selectedFile, setSelectedFile] = useState();
     const [enabled, setEnabled] = useState(false)
     const [openDeleteTeam,setOpenDeleteTeam]=useState(false);
+    const [loading,setLoading]=useState(false);
 
     const TodaysDate = () => {
         var today = new Date();
@@ -38,6 +40,7 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
     }
 
     const upload = () => {
+        setLoading(true);
         const uploadTask = storage.ref(`projects/${selectedFile.name}`).put(selectedFile);
         uploadTask.on(
             "state_changed",
@@ -57,11 +60,16 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                             Date: TodaysDate(),
                             TeamName: selectedTeam.TeamName,
                         })
-                        setEnabled(false);
-                        setOpenAddProjectDialog(false);
-                        setSelectedFile(null);
-                        fetch();
-                        setSelectedTeam({ ...selectedTeam, Date: TodaysDate(), Project: url })
+                        .then((result)=>{
+                            setLoading(false);
+                            setEnabled(false);
+                            setOpenAddProjectDialog(false);
+                            setSelectedFile(null);
+                            fetch();
+                            setSelectedTeam({ ...selectedTeam, Date: TodaysDate(), Project: url })
+                        }).catch((err)=>{
+                            console.log(Error)
+                        })
                     });
             }
         );
@@ -121,14 +129,19 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                 <DialogTitle id="form-dialog-title">Select the project file</DialogTitle>
                 <Divider />
                 <DialogContent>
-                    <FileUpload setSelectedFile={setSelectedFile} setEnabled={setEnabled} selectedFile={selectedFile} enabled={enabled} />
+                    {
+                        loading===true?(<div style={{width:"60vw"}}>LOADING...</div>):(
+                            <FileUpload setSelectedFile={setSelectedFile} setEnabled={setEnabled} selectedFile={selectedFile} enabled={enabled} />
+                        )
+                    }
+                    
                 </DialogContent>
                 <Divider />
                 <DialogActions>
-                    <Button onClick={() => { setOpenAddProjectDialog(false) }} color="primary">
+                    <Button disabled={loading} onClick={() => { setOpenAddProjectDialog(false) }} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={() => { upload() }} disabled={!enabled} color="primary">
+                    <Button onClick={() => { upload() }} disabled={(!enabled)||(loading)} color="primary">
                         Upload
                     </Button>
                 </DialogActions>
