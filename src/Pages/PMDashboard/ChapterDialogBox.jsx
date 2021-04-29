@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styles from './styles.module.css'
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
-import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, List, ListItem, ListItemText, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, List, ListItem, ListItemText, Paper, Slide, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Typography } from '@material-ui/core';
 import FileUpload from './FileUpload';
 import { storage } from "../../firebase"
 import axios from 'axios';
@@ -12,12 +12,13 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, deleteFromTeam, DeleteTeam, addInTeam, openTeamDialog, employeeListDialog, setEmployeeListDialog, setOtherEmployees, setOpenTeamDialog, setSelectedTeam, setTeamMembers, selectedTeam, openEmployeeList,fetch ,teams}) {
+function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, deleteFromTeam, DeleteTeam, addInTeam, openTeamDialog, employeeListDialog, setEmployeeListDialog, setOtherEmployees, setOpenTeamDialog, setSelectedTeam, setTeamMembers, selectedTeam, openEmployeeList, fetch, teams }) {
 
     const history = useHistory();
     const [openAddProjectDialog, setOpenAddProjectDialog] = useState(false);
     const [selectedFile, setSelectedFile] = useState();
     const [enabled, setEnabled] = useState(false)
+    const [openDeleteTeam,setOpenDeleteTeam]=useState(false);
 
     const TodaysDate = () => {
         var today = new Date();
@@ -60,7 +61,7 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                         setOpenAddProjectDialog(false);
                         setSelectedFile(null);
                         fetch();
-                        setSelectedTeam({...selectedTeam,Date:TodaysDate(),Project:url})
+                        setSelectedTeam({ ...selectedTeam, Date: TodaysDate(), Project: url })
                     });
             }
         );
@@ -68,6 +69,26 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
 
     return (
         <Dialog className={styles.dialogPaper} fullScreen open={openTeamDialog} onClose={handleCloseTeamDialog} TransitionComponent={Transition}>
+            <Dialog
+                open={openDeleteTeam}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">{"Are you sure you want to delete this team?"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        This step cannot be undone.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={()=>setOpenDeleteTeam(false)} color="primary">
+                        No
+                    </Button>
+                    <Button onClick={() => DeleteTeam()} color="primary">
+                        Yes
+                    </Button>
+                </DialogActions>
+            </Dialog>
 
 
             <Dialog open={employeeListDialog} aria-labelledby="form-dialog-title">
@@ -153,7 +174,9 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
             </TableContainer>
             <div className={styles.buttonBox}>
                 <Button className={styles.AddButton} onClick={() => openEmployeeList()}>Add Members</Button>
-                <Button className={styles.DeleteButton} onClick={() => DeleteTeam()}>Delete Team</Button>
+                <Button className={styles.DeleteButton} onClick={()=>setOpenDeleteTeam(true)} >Delete Team</Button>
+
+
             </div>
             <Divider style={{ background: "white" }} />
             <div className={styles.FileDiv}>
