@@ -240,7 +240,7 @@ function LoginPage() {
                     </label>
                     <div>
                         <label className="label-password">
-                            <TextField type={seePassword ? ("text") : ("password")} label="PASSWORD" className="text" alue={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" onBlur={() => setCloseEyes(false)} onFocus={() => setCloseEyes(true)}/>
+                            <TextField type={seePassword ? ("text") : ("password")} label="PASSWORD" className="text" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" onBlur={() => setCloseEyes(false)} onFocus={() => setCloseEyes(true)}/>
                         </label>
                     </div>
                     {
