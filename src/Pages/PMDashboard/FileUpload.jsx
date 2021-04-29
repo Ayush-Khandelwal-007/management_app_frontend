@@ -1,6 +1,6 @@
 import { Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import styles from "./styles.module.css"
 import "./styles.css"
 
@@ -64,10 +64,6 @@ function FileUpload({ setSelectedFile, setEnabled, selectedFile, enabled }) {
     const removeFile = () => {
         setEnabled(false);
         setSelectedFile(null);
-    }
-
-    const Check = () => {
-
     }
 
     return (

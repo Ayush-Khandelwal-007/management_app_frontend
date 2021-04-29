@@ -9,7 +9,6 @@ import axios from 'axios'
 import { Alert } from '@material-ui/lab'
 import ChapterDialogBox from './ChapterDialogBox'
 import AddTeamDialog from './AddTeamDialog'
-import { ControlPointDuplicateOutlined } from '@material-ui/icons'
 
 function PMDashboard() {
     const history = useHistory();

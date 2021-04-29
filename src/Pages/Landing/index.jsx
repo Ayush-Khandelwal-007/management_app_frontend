@@ -8,6 +8,7 @@ import { useUser } from '../../contexts/user'
 
 function Landing() {
     let history = useHistory();
+    // eslint-disable-next-line 
     const [state, dispatch] = useUser();
 
     const goToLoginPage = () => {

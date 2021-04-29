@@ -6,7 +6,6 @@ import { AppBar, Button, Dialog, DialogActions, DialogContent, DialogContentText
 import FileUpload from './FileUpload';
 import { storage } from "../../firebase"
 import axios from 'axios';
-import { useHistory } from 'react-router';
 import { Error } from '@material-ui/icons';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -15,7 +14,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, deleteFromTeam, DeleteTeam, addInTeam, openTeamDialog, employeeListDialog, setEmployeeListDialog, setOtherEmployees, setOpenTeamDialog, setSelectedTeam, setTeamMembers, selectedTeam, openEmployeeList, fetch, teams }) {
 
-    const history = useHistory();
     const [openAddProjectDialog, setOpenAddProjectDialog] = useState(false);
     const [selectedFile, setSelectedFile] = useState();
     const [enabled, setEnabled] = useState(false)
@@ -92,7 +90,13 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                     <Button onClick={()=>setOpenDeleteTeam(false)} color="primary">
                         No
                     </Button>
-                    <Button onClick={() => DeleteTeam()} color="primary">
+                    <Button 
+                        onClick={() => {
+                            DeleteTeam();
+                            setOpenDeleteTeam(false)
+                        }} 
+                        color="primary"
+                    >
                         Yes
                     </Button>
                 </DialogActions>
@@ -200,7 +204,7 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                             <div className={styles.buttonBox}>
                                 <Button className={styles.ReplaceButton} onClick={() => { setOpenAddProjectDialog(true) }}>Replace Project File</Button>
                                 {
-                                    selectedTeam.Project === "" ? (null) : (<Button className={styles.ReplaceButton}><a target="_blank" href={selectedTeam.Project}>See Project</a></Button>)
+                                    selectedTeam.Project === "" ? (null) : (<Button className={styles.ReplaceButton}><a rel="noreferrer" target="_blank" href={selectedTeam.Project}>See Project</a></Button>)
                                 }
                             </div>
                         </>
