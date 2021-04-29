@@ -7,6 +7,7 @@ import { useHistory } from 'react-router'
 import { useUser } from '../../contexts/user'
 import axios from 'axios'
 import CloseIcon from '@material-ui/icons/Close';
+import {url} from '../../constants'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -23,7 +24,7 @@ function PMDashboard() {
     const [selectedTeamInfo, setSelectedTeamInfo] = useState({});
 
     const fetch = () => {
-        axios.get('http://localhost:4000/api/view_Employee_to_team', {
+        axios.get(`${url}api/view_Employee_to_team`, {
             params: {
                 EmpUserName: state.user.username
             }
@@ -36,7 +37,7 @@ function PMDashboard() {
     }
 
     const fetchTeamData=(team)=>{
-        axios.get('http://localhost:4000/api/team', {
+        axios.get(`${url}api/team`, {
             params: {
                 TeamName:team
             }
@@ -52,7 +53,7 @@ function PMDashboard() {
         fetchTeamData(team.TeamName);
         setOpenTeamDialog(true);
         setSelectedTeam(team);
-        axios.get('http://localhost:4000/api/view_t_Employee', {
+        axios.get(`${url}api/view_t_Employee`, {
             params: {
                 TName: team.TeamName
             }

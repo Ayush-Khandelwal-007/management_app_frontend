@@ -11,6 +11,7 @@ import Axios from 'axios'
 import { useHistory } from 'react-router';
 import { Alert } from '@material-ui/lab';
 import { useUser } from '../../contexts/user';
+import {url} from '../../constants'
 
 function LoginPage() {
     const history = useHistory();
@@ -40,7 +41,7 @@ function LoginPage() {
         e.preventDefault();
         setLoading(true);
         if (type === 'manager') {
-            Axios.post('http://localhost:4000/api/insertp', {
+            Axios.post(`${url}api/insertp`, {
                 ProdUserName: username,
                 ProdName: name,
                 ProdPass: password,
@@ -60,7 +61,7 @@ function LoginPage() {
             })
         }
         else {
-            Axios.post('http://localhost:4000/api/inserte', {
+            Axios.post(`${url}api/inserte`, {
                 EmpUserName: username,
                 EmpName: name,
                 EmpPass: password,
@@ -86,7 +87,7 @@ function LoginPage() {
         e.preventDefault();
         setLoading(true);
         if (type === 'manager') {
-            Axios.get('http://localhost:4000/api/authp', {
+            Axios.get(`${url}api/authp`, {
                 params: {
                     ProdUserName: username,
                     ProdPass: password,
@@ -123,7 +124,7 @@ function LoginPage() {
             })
         }
         else {
-            Axios.get('http://localhost:4000/api/authe', {
+            Axios.get(`${url}api/authe`, {
                 params: {
                     EmpUserName: username,
                     EmpPass: password,

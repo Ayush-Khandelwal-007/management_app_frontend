@@ -2,12 +2,13 @@ import React from 'react'
 import axios from 'axios'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core'
 import { useUser } from '../../contexts/user';
+import {url} from '../../constants';
 
 function AddTeamDialog({teamName,setTeamName,setOpenAddNew,setOpenSnack,setError,openAddNew,fetch}) {
     // eslint-disable-next-line
     const [state, dispatch] = useUser();
     const addTeam = () => {
-        axios.post('http://localhost:4000/api/insertt', { ProdUserName: state.user.username, TeamName: teamName })
+        axios.post(`${url}api/insertt`, { ProdUserName: state.user.username, TeamName: teamName })
             .then(() => {
                 setTeamName('');
                 fetch();

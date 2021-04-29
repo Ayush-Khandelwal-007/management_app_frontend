@@ -9,6 +9,7 @@ import axios from 'axios'
 import { Alert } from '@material-ui/lab'
 import ChapterDialogBox from './ChapterDialogBox'
 import AddTeamDialog from './AddTeamDialog'
+import { url } from '../../constants'
 
 function PMDashboard() {
     const history = useHistory();
@@ -28,7 +29,7 @@ function PMDashboard() {
 
 
     const deleteFromTeam=(emp)=>{
-        axios.delete('http://localhost:4000/api/remove_employee_from_team',{
+        axios.delete(`${url}api/remove_employee_from_team`,{
             params:{
                 TeamName:selectedTeam.TeamName,
                 EmpUserName:emp.EmpUserName
@@ -41,7 +42,7 @@ function PMDashboard() {
     }
 
     const DeleteTeam = () => {
-        axios.delete('http://localhost:4000/api/delete_team_from_emp', {
+        axios.delete(`${url}api/delete_team_from_emp`, {
             params: {
                 TeamName: selectedTeam.TeamName,
             }
@@ -54,7 +55,7 @@ function PMDashboard() {
 
     const addInTeam = (emp) => {
         console.log(emp)
-        axios.put('http://localhost:4000/api/assign_team', {
+        axios.put(`${url}api/assign_team`, {
             TeamName: selectedTeam.TeamName,
             EmpUserName: emp.EmpUserName
         }).then((res) => {
@@ -67,7 +68,7 @@ function PMDashboard() {
     }
 
     const openEmployeeList = () => {
-        axios.get('http://localhost:4000/api/view_nit_Employee', {
+        axios.get(`${url}api/view_nit_Employee`, {
             params: {
                 TName: selectedTeam.TeamName
             }
@@ -80,7 +81,7 @@ function PMDashboard() {
     }
 
     const fetchTeamMembers = (team) =>{
-        axios.get('http://localhost:4000/api/view_t_Employee', {
+        axios.get(`${url}api/view_t_Employee`, {
             params: {
                 TName: team.TeamName
             }
@@ -93,7 +94,7 @@ function PMDashboard() {
     }
 
     const fetch = () => {
-        axios.get('http://localhost:4000/api/view_teams', {
+        axios.get(`${url}api/view_teams`, {
             params: {
                 ProdUserName: state.user.username
             }
