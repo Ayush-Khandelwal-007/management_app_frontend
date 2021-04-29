@@ -12,7 +12,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, deleteFromTeam, DeleteTeam, addInTeam, openTeamDialog, employeeListDialog, setEmployeeListDialog, setOtherEmployees, setOpenTeamDialog, setSelectedTeam, setTeamMembers, selectedTeam, openEmployeeList }) {
+function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, deleteFromTeam, DeleteTeam, addInTeam, openTeamDialog, employeeListDialog, setEmployeeListDialog, setOtherEmployees, setOpenTeamDialog, setSelectedTeam, setTeamMembers, selectedTeam, openEmployeeList,fetch ,teams}) {
 
     const history = useHistory();
     const [openAddProjectDialog, setOpenAddProjectDialog] = useState(false);
@@ -36,8 +36,6 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
         return today;
     }
 
-    console.log(TodaysDate());
-
     const upload = () => {
         const uploadTask = storage.ref(`projects/${selectedFile.name}`).put(selectedFile);
         uploadTask.on(
@@ -48,13 +46,11 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                 console.log(error);
             },
             () => {
-                console.log("hi")
                 storage
                     .ref("projects")
                     .child(selectedFile.name)
                     .getDownloadURL()
                     .then((url) => {
-                        console.log(url);
                         axios.put('http://localhost:4000/api/assign_project', {
                             Project: url,
                             Date: TodaysDate(),
@@ -63,6 +59,8 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                         setEnabled(false);
                         setOpenAddProjectDialog(false);
                         setSelectedFile(null);
+                        fetch();
+                        setSelectedTeam({...selectedTeam,Date:TodaysDate(),Project:url})
                     });
             }
         );
@@ -164,7 +162,7 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                         <>
                             <div>Project Assigned On: <u><strong>{selectedTeam.Date}</strong></u></div>
                             <div className={styles.buttonBox}>
-                                <Button className={styles.ReplaceButton} onClick={() => { setOpenAddProjectDialog(true) }}>"Replace Project File</Button>
+                                <Button className={styles.ReplaceButton} onClick={() => { setOpenAddProjectDialog(true) }}>Replace Project File</Button>
                                 {
                                     selectedTeam.Project === "" ? (null) : (<Button className={styles.ReplaceButton}><a target="_blank" href={selectedTeam.Project}>See Project</a></Button>)
                                 }
@@ -172,9 +170,9 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                         </>
                     ) : (
                         <>
-                            <div style={{flexDirection:"column",gap:"3vh",display:"flex"}}>
-                            <div>No Project Assigned Yet</div>
-                            <Button className={styles.ReplaceButton} style={{width :"20vw"}} onClick={() => { setOpenAddProjectDialog(true) }}>Add Project File</Button>
+                            <div style={{ flexDirection: "column", gap: "3vh", display: "flex" }}>
+                                <div>No Project Assigned Yet</div>
+                                <Button className={styles.ReplaceButton} style={{ width: "20vw" }} onClick={() => { setOpenAddProjectDialog(true) }}>Add Project File</Button>
                             </div>
                         </>
                     )

@@ -4,7 +4,7 @@ import axios from 'axios'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core'
 import { useUser } from '../../contexts/user';
 
-function AddTeamDialog({teamName,setTeamName,setOpenAddNew,setOpenSnack,setError,openAddNew}) {
+function AddTeamDialog({teamName,setTeamName,setOpenAddNew,setOpenSnack,setError,openAddNew,fetch}) {
     // eslint-disable-next-line
     const [state, dispatch] = useUser();
     const addTeam = () => {

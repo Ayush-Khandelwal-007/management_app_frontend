@@ -162,6 +162,8 @@ function PMDashboard() {
                 setTeamMembers={setTeamMembers}
                 selectedTeam={selectedTeam}
                 openEmployeeList={openEmployeeList}
+                fetch={fetch}
+                teams={teams}
             />
             <Snackbar open={openSnack} autoHideDuration={4000} onClose={handleCloseSnack}>
                 <Alert className={styles.snackbarDiv} severity="error">
@@ -175,6 +177,7 @@ function PMDashboard() {
                 setOpenSnack={setOpenSnack}
                 setError={setError}
                 openAddNew={openAddNew}
+                fetch={fetch}
             />
             <div className={styles.header}>
                 <div>

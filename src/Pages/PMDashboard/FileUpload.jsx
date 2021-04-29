@@ -1,9 +1,22 @@
-import React, { useRef, useState } from 'react';
+import { Snackbar } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
+import React, { useRef, useState, useEffect } from 'react';
+import styles from "./styles.module.css"
 import "./styles.css"
 
 function FileUpload({ setSelectedFile, setEnabled, selectedFile, enabled }) {
     const [errorMessage, setErrorMessage] = useState('');
+    const [openSnack, setOpenSnack] = useState(false);
+
     const fileInputRef = useRef();
+
+    const handleCloseSnack = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenSnack(false);
+    };
+
     const dragOver = (e) => {
         e.preventDefault();
     }
@@ -19,10 +32,16 @@ function FileUpload({ setSelectedFile, setEnabled, selectedFile, enabled }) {
     const fileDrop = (e) => {
         e.preventDefault();
         const files = e.dataTransfer.files;
-        console.log(files);
         if (files.length === 1) {
-            setSelectedFile(files[0]);
-            setEnabled(true);
+            if (fileType(files[0].name) === "pdf" || fileType(files[0].name) === "doc" || fileType(files[0].name) === "docx") {
+                setSelectedFile(files[0]);
+                setEnabled(true);
+            }
+            else {
+                setSelectedFile(null);
+                setErrorMessage('Please select either a Doc or a PDF')
+                setOpenSnack(true)
+            }
         }
     }
 
@@ -47,12 +66,17 @@ function FileUpload({ setSelectedFile, setEnabled, selectedFile, enabled }) {
         setSelectedFile(null);
     }
 
-    // const filesSelected = () => {
-    //     console.log(fileInputRef.current.files)
-    // }
+    const Check = () => {
+
+    }
 
     return (
         <div className="content">
+            <Snackbar open={openSnack} autoHideDuration={4000} onClose={handleCloseSnack}>
+                <Alert className={styles.snackbarDiv} severity="error">
+                    <strong>{errorMessage}</strong>
+                </Alert>
+            </Snackbar>
             {
                 !enabled && (
                     <div className="drop-container"
@@ -72,7 +96,17 @@ function FileUpload({ setSelectedFile, setEnabled, selectedFile, enabled }) {
                             className="file-input"
                             type="file"
                             multiple
-                            onChange={(e) => { setSelectedFile(e.target.files[0]); setEnabled(true) }}
+                            onChange={(e) => {
+                                if (fileType(e.target.files[0].name) === "pdf" || fileType(e.target.files[0].name) === "doc" || fileType(e.target.files[0].name) === "docx") {
+                                    setSelectedFile(e.target.files[0]);
+                                    setEnabled(true);
+                                }
+                                else {
+                                    setSelectedFile(null);
+                                    setErrorMessage('Please select either a Doc or a PDF')
+                                    setOpenSnack(true)
+                                }
+                            }}
                         />
                     </div>
                 )
