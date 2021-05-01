@@ -140,7 +140,7 @@ function PMDashboard() {
                             <>
                                 <div>Project Assigned On: <u><strong>{selectedTeam.Date}</strong></u></div>
                                 <div className={styles.buttonBox}>
-                                    <Button className={styles.ReplaceButton}><a rel="noreferrer" target="_blank" href={selectedTeamInfo.Project}>See Project</a></Button>
+                                    <Button rel="noreferrer" target="_blank" href={selectedTeamInfo.Project} className={styles.ReplaceButton}>See Project</Button>
                                 </div>
                             </>
                         ) : (
