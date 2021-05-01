@@ -215,7 +215,7 @@ function ChapterDialogBox({ handleCloseTeamDialog, teamMembers, otherEmployees, 
                             <div>Project Assigned On: <u><strong>{selectedTeam.Date}</strong></u></div>
                             <div className={styles.buttonBox}>
                                 <Button className={styles.ReplaceButton} onClick={() => { setOpenAddProjectDialog(true) }}>Replace Project File</Button>
-                                <Button className={styles.ReplaceButton}><a rel="noreferrer" target="_blank" href={selectedTeam.Project}>See Project</a></Button>
+                                <Button rel="noreferrer" target="_blank" href={selectedTeam.Project} className={styles.ReplaceButton}>See Project</Button>
                                 <Button className={styles.DeleteButton} onClick={()=>{DeleteProject()}} >Remove Project</Button>
                             </div>
                         </>
