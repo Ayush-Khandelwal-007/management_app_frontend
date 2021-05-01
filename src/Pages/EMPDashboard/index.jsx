@@ -136,11 +136,11 @@ function PMDashboard() {
 
                 <div className={styles.FileDiv}>
                     {
-                        selectedTeam.Project ? (
+                        selectedTeamInfo.Project ? (
                             <>
                                 <div>Project Assigned On: <u><strong>{selectedTeam.Date}</strong></u></div>
                                 <div className={styles.buttonBox}>
-                                    <Button className={styles.ReplaceButton}><a rel="noreferrer" target="_blank" href={selectedTeam.Project}>See Project</a></Button>
+                                    <Button className={styles.ReplaceButton}><a rel="noreferrer" target="_blank" href={selectedTeamInfo.Project}>See Project</a></Button>
                                 </div>
                             </>
                         ) : (
